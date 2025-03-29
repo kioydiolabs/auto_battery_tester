@@ -1,4 +1,6 @@
-import {mqtt} from 'mqtt';
+import mqtt from 'mqtt';
+
+let msgcount: number = 0;
 
 const client = mqtt.connect("mqtt://192.168.1.216", {
   username: "admin",
@@ -15,3 +17,4 @@ client.on('connect', () => {
     console.error(err);
   }
 })
+
