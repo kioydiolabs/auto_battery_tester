@@ -70,52 +70,56 @@ const getMeasurementFromScope = async (channel: string): Promise<string> => {
 };
 
 client.on("message", async (_, message) => {
-  const jsonMSG: mqttMessage = JSON.parse(message.toString());
-
-  msgcount = msgcount + 1;
-
-  const currentString = await getMeasurementFromScope("CHAN4");
-  const voltageString = await getMeasurementFromScope("CHAN3");
-
-  const current = parseFloat(currentString);
-  const voltage = parseFloat(voltageString);
-
-  const logEntry: csvRow = {
-    time: new Date().toISOString(),
-    current: current || 0,
-    voltage: voltage || 0,
-    temperature: jsonMSG.deg_c || 0,
-    relay: jsonMSG.relay,
-  };
-
   try {
-    csvStream.write(logEntry);
-    console.log(`Logged ${msgcount} entry.`);
-    console.log(logEntry);
-  } catch (err) {
-    console.error(err);
-  }
+    const jsonMSG: mqttMessage = JSON.parse(message.toString());
 
-  if (msgcount == linesBeforeTest) {
-    client.publish("station/70/commands", "RELAY_ON");
-  }
-  try {
-    if (voltage < undervoltageProtection) {
-      client.publish("station/70/commands", "RELAY_OFF");
-      UVP = true;
-      throw new Error(
-        `Undervoltage Protection: The last battery voltage recorded by the oscilloscope on CH3 was ${voltage}V which is under the ${undervoltageProtection}V limit, so the relay was turned off to prevent damage to the battery. The program will now continue to log 60 more lines of data.`,
-      );
+    msgcount = msgcount + 1;
+
+    const currentString = await getMeasurementFromScope("CHAN4");
+    const voltageString = await getMeasurementFromScope("CHAN3");
+
+    const current = parseFloat(currentString);
+    const voltage = parseFloat(voltageString);
+
+    const logEntry: csvRow = {
+      time: new Date().toISOString(),
+      current: current || 0,
+      voltage: voltage || 0,
+      temperature: jsonMSG.deg_c || 0,
+      relay: jsonMSG.relay,
+    };
+
+    try {
+      csvStream.write(logEntry);
+      console.log(`Logged ${msgcount} entry.`);
+      console.log(logEntry);
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (msgcount == linesBeforeTest) {
+      client.publish("station/70/commands", "RELAY_ON");
+    }
+    try {
+      if (voltage < undervoltageProtection) {
+        client.publish("station/70/commands", "RELAY_OFF");
+        UVP = true;
+        throw new Error(
+          `Undervoltage Protection: The last battery voltage recorded by the oscilloscope on CH3 was ${voltage}V which is under the ${undervoltageProtection}V limit, so the relay was turned off to prevent damage to the battery. The program will now continue to log 60 more lines of data.`,
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (UVP === true) {
+      msgCountAfterUVP = msgCountAfterUVP + 1;
+      if (msgCountAfterUVP >= 60) {
+        console.log("Finished.");
+        process.exit(9999);
+      }
     }
   } catch (err) {
     console.error(err);
-  }
-
-  if (UVP === true) {
-    msgCountAfterUVP = msgCountAfterUVP + 1;
-    if (msgCountAfterUVP >= 60) {
-      console.log("Finished.");
-      process.exit(9999);
-    }
   }
 });
