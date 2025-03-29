@@ -11,10 +11,13 @@
   "license": "ISC",
   "packageManager": "pnpm@10.7.0",
   "dependencies": {
+    "fast-csv": "^5.0.2",
     "mqtt": "^5.10.4",
     "net": "^1.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }
