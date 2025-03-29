@@ -10,10 +10,10 @@ config();
 // config
 
 const undervoltageProtection: number = Number(
-  process.env.UNDERVOLTAGEPROTECTION,
+  process.env.UNDERVOLTAGEPROTECTION!,
 );
-const testName: string = process.env.TESTNAME;
-const linesBeforeTest: number = Number(process.env.LINESBEFORETEST);
+const testName: string = process.env.TESTNAME!;
+const linesBeforeTest: number = Number(process.env.LINESBEFORETEST!);
 
 // end of config
 
