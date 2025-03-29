@@ -19,6 +19,10 @@ const linesBeforeTest: number = Number(process.env.LINESBEFORETEST!);
 
 const filename = "test_data/" + testName + ".csv";
 
+console.log("AUTOMATIC BATTERY TESTER | KIOYDIOLABS © 2025\n");
+console.log(filename);
+console.log("\n\n");
+
 const dir = "./test_data";
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
