@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "prod": "ts-node ./index.ts"
+    "prod": "tsx index.ts"
   },
   "keywords": [],
   "author": "",
