@@ -84,7 +84,7 @@ client.on("message", async (_, message) => {
     console.error(err);
   }
 
-  if (msgcount >= linesBeforeTest) {
+  if (msgcount == linesBeforeTest) {
     client.publish("station/70/commands", "RELAY_ON");
   }
   try {
