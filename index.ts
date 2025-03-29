@@ -90,6 +90,8 @@ client.on("message", async (_, message) => {
 
   try {
     csvStream.write(logEntry);
+    console.log(`Logged ${msgcount} entry.`);
+    console.log(logEntry);
   } catch (err) {
     console.error(err);
   }
