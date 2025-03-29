@@ -81,7 +81,7 @@ client.on("message", async (_, message) => {
   const voltage = parseFloat(voltageString);
 
   const logEntry: csvRow = {
-    time: new Date().toISOString(),
+    time: new Date().toLocaleTimeString(),
     current: current || 0,
     voltage: voltage || 0,
     temperature: jsonMSG.deg_c || 0,
