@@ -4,11 +4,16 @@ import * as fs from "fs";
 import * as fastCsv from "fast-csv";
 import * as net from "node:net";
 
+import { config } from "dotenv";
+config();
+
 // config
 
-const undervoltageProtection: number = 0.9;
-const testName: string = "";
-const linesBeforeTest: number = 10;
+const undervoltageProtection: number = Number(
+  process.env.UNDERVOLTAGEPROTECTION,
+);
+const testName: string = process.env.TESTNAME;
+const linesBeforeTest: number = Number(process.env.LINESBEFORETEST);
 
 // end of config
 
@@ -101,8 +106,8 @@ client.on("message", async (_, message) => {
 
   if (UVP === true) {
     msgCountAfterUVP = msgCountAfterUVP + 1;
-    if (!(msgCountAfterUVP >= 60)) {
-      console.log("Going offline");
+    if (msgCountAfterUVP >= 60) {
+      console.log("Finished.");
       process.exit(9999);
     }
   }
