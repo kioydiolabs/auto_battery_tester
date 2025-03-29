@@ -17,7 +17,12 @@ const linesBeforeTest: number = Number(process.env.LINESBEFORETEST);
 
 // end of config
 
-const filename = testName + ".csv";
+const filename = "test_data/" + testName + ".csv";
+
+const dir = "./test_data";
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
 const stream = fs.createWriteStream(filename);
 const csvStream = fastCsv.format<csvRow, csvRow>({ headers: true });
