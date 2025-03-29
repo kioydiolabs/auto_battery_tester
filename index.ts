@@ -100,6 +100,7 @@ client.on("message", async (_, message) => {
   }
 
   if (UVP === true) {
+    msgCountAfterUVP = msgCountAfterUVP + 1;
     if (!(msgCountAfterUVP >= 60)) {
       console.log("Going offline");
       process.exit(9999);
