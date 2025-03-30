@@ -96,6 +96,9 @@ client.on("message", async (_, message) => {
     try {
       csvStream.write(logEntry);
       console.log(`Logged ${msgcount} entry.`);
+      if (UVP) {
+        console.log("PUVP: " + msgCountAfterUVP);
+      }
       console.log(logEntry);
     } catch (err) {
       console.error(err);
